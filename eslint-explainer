@@ -3,12 +3,17 @@
 'use strict';
 
 const commander = require('commander');
-const { CLIEngine } = require('eslint');
+
+// project root path
+const projectFolder = process.cwd().split('/node_modules')[0];
+
+// load project eslint
+const { CLIEngine } = require(projectFolder + '/node_modules/eslint');
 const explain = require('./explain');
 
 commander
   .version('0.0.1')
-  .command('eslint-explainer filename', 'output the explained list of eslint rules applied to that file')
+  .command('eslint-explainer [filename]', 'output the explained list of eslint rules applied to the file')
   .action((file) => {
     const config = new CLIEngine({}).getConfigForFile(file);
     console.log(explain(config.rules));
