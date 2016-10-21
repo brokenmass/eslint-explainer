@@ -3,4 +3,4 @@
 const config = require('./config');
 const explain = require('../explain');
 
-console.log(explain(config));
+console.log(explain(config.rules));
