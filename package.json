@@ -19,9 +19,6 @@
     "url": "https://github.com/brokenmass/eslint-explainer/issues"
   },
   "homepage": "https://github.com/brokenmass/eslint-explainer#readme",
-  "dependencies": {
-    "commander": "^2.9.0"
-  },
   "devDependencies": {
     "eslint": "^3.8.1",
     "eslint-config-mailonline": "^1.0.3"

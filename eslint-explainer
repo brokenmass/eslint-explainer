@@ -1,21 +1,14 @@
 #!/usr/bin/env node
-
 'use strict';
 
-const commander = require('commander');
+const explain = require('./explain');
+const path = require('path');
 
-// project root path
-const projectFolder = process.cwd().split('/node_modules')[0];
+const filename = process.argv[2] || '.';
 
 // load project eslint
-const { CLIEngine } = require(projectFolder + '/node_modules/eslint');
-const explain = require('./explain');
+const eslintPath = path.join(process.cwd(), '/node_modules/eslint')
+const { CLIEngine } = require(eslintPath);
 
-commander
-  .version('0.0.1')
-  .command('eslint-explainer [filename]', 'output the explained list of eslint rules applied to the file')
-  .action((file) => {
-    const config = new CLIEngine({}).getConfigForFile(file);
-    console.log(explain(config.rules));
-  })
-  .parse(process.argv);
+const config = new CLIEngine({}).getConfigForFile(filename);
+console.log(explain(config.rules));
