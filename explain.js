@@ -55,7 +55,7 @@ function explain({ rules, colors = false }) {
   const explainedRules = out.join('\n');
 
   if (!colors || !chalk.supportsColor) {
-    explainedRules = chalk.stripColor(explainedRules);
+    return chalk.stripColor(explainedRules);
   }
 
   return explainedRules;
