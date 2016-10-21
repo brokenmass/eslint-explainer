@@ -6,13 +6,30 @@ const ruleRegex = /"([a-z\-/]+)":/;
 function printDescription(rule, lineLenght, commentPosition) {
   const whitespaceLength = lineLenght < commentPosition ? (commentPosition - lineLenght) : 1;
   const whitespaces = new Array(whitespaceLength).fill(' ').join('');
+  let comment = whitespaces + '// ';
   if (!rule) {
-    return `${whitespaces}// UNKNOWN RULE`;
+    return ${comment} + 'UNKNOWN RULE';
   }
+
   if (rule.deprecated || rule.removed) {
-    return `${whitespaces}// ${rule.deprecated ? 'DEPRECATED' : 'REMOVED'}: replaced by ${rule.replacedBy}`
+    comment += rule.deprecated ? 'DEPRECATED' : 'REMOVED';
+    if (rule.replacedBy) {
+      comment += ': replaced by +' rule.replacedBy;
+    }
+
+    return comment;
+
   } else {
-    return `${whitespaces}// ${rule.description} ${rule.recommended ? '[RECOMMENDED]' : ''} ${rule.fixable ? '[AUTOFIX]' : ''}`
+    comment += rule.description;
+    if (rule.recommended) {
+      comment += ' [RECOMMENDED]';
+    }
+
+    if (rule.fixable) {
+      comment += ' [AUTOFIX]';
+    }
+
+    return comment;
   }
 }
 
