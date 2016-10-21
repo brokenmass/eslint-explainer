@@ -1,0 +1,33 @@
+{
+  "parserOptions": {
+    "ecmaVersion": 7,
+    "sourceType": "module",
+    "ecmaFeatures": {
+      "jsx": true
+    }
+  },
+  "extends": ["mailonline"],
+  "rules": {
+    "import/no-commonjs": "off",
+    "strict": "off",
+    "max-len": ["error", 120],
+    "promise/no-native": "off",
+    "react/jsx-indent-props": ["error", 2],
+    "react/forbid-component-props": "off",
+    "lodash/prefer-lodash-typecheck": "off"
+  },
+  "settings": {
+    "import/ignore": [
+      "node_modules",
+      "css",
+      "\\.jpg$",
+      "\\.png$",
+      "\\.scss$"
+    ]
+  },
+  "env": {
+    "browser": true,
+    "node": true,
+    "mocha": true
+  }
+}
