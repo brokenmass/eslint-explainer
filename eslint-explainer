@@ -11,4 +11,9 @@ const eslintPath = path.join(process.cwd(), '/node_modules/eslint')
 const { CLIEngine } = require(eslintPath);
 
 const config = new CLIEngine({}).getConfigForFile(filename);
-console.log(explain(config.rules));
+const explainedRules = explain({
+  rules: config.rules,
+  colors: true
+});
+
+console.log(explainedRules);

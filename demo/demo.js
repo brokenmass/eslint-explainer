@@ -3,4 +3,9 @@
 const config = require('./config');
 const explain = require('../explain');
 
-console.log(explain(config.rules));
+const explainedRules = explain({
+  rules: config.rules,
+  colors: true
+});
+
+console.log(explainedRules);

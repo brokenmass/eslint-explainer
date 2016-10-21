@@ -1,52 +1,64 @@
 'use strict';
 
+const chalk = require('chalk');
+
 const explanations = require('./explanations');
-const ruleRegex = /"([a-z\-/]+)":/;
+const ruleRegex = /"([^"]+)":/i;
 
-function printDescription(rule, lineLenght, commentPosition) {
-  const whitespaceLength = lineLenght < commentPosition ? (commentPosition - lineLenght) : 1;
-  const whitespaces = new Array(whitespaceLength).fill(' ').join('');
-  let comment = whitespaces + '// ';
+function printPadding(maxRuleLength, lineLength) {
+  const paddingLength = lineLength < maxRuleLength ? maxRuleLength - lineLength : 1;
+  return new Array(paddingLength).fill(' ').join('');
+}
+
+function printExplanation(rule) {
+  let explanation = '';
   if (!rule) {
-    return comment + 'UNKNOWN RULE';
-  }
-
-  if (rule.deprecated || rule.removed) {
-    comment += rule.deprecated ? 'DEPRECATED' : 'REMOVED';
+    explanation = chalk.dim('UNKNOWN RULE');
+  } else if (rule.deprecated || rule.removed) {
+    explanation += chalk.red(rule.deprecated ? 'DEPRECATED' : 'REMOVED');
     if (rule.replacedBy) {
-      comment += ': replaced by ' + rule.replacedBy;
+      explanation += chalk.red(' and replaced by ' + rule.replacedBy);
     }
-
-    return comment;
-
   } else {
-    comment += rule.description;
+    explanation += chalk.green(rule.description);
     if (rule.recommended) {
-      comment += ' [RECOMMENDED]';
+      explanation += chalk.cyan(' [RECOMMENDED]');
     }
 
     if (rule.fixable) {
-      comment += ' [AUTOFIX]';
+      explanation += chalk.blue(' [AUTOFIX]');
     }
-
-    return comment;
   }
+
+  return explanation;
 }
 
-function explain(rules) {
+function explain({ rules, colors = false }) {
   const rulesLines = JSON.stringify(rules, null, 2).split('\n');
-  const maxRulesLength = Math.max(...Object.keys(rules).map(key => key.length));
-  const commentPosition = maxRulesLength + 12;
+  const rulesLengths = Object.keys(rules).map(key => key.length)
+  const maxRuleLength = Math.max(...rulesLengths) + 10;
 
   const out = rulesLines.map((line) => {
     const match = line.match(ruleRegex);
-    if (match && match.length === 2 && rules.hasOwnProperty(match[1])) {
-      return line + printDescription(explanations[match[1]], line.length, commentPosition)
+    const ruleName = match && match[1];
+
+    if (ruleName && rules.hasOwnProperty(ruleName)) {
+      const padding = printPadding(maxRuleLength, line.length);
+      const explanation = printExplanation(explanations[ruleName], colors);
+      const comment = `${padding}${chalk.dim('// ')}${explanation}`;
+
+      return line.replace(ruleName, chalk.yellow(ruleName)) + comment;
     }
     return line;
   });
 
-  return out.join('\n');
+  const explainedRules = out.join('\n');
+
+  if (!colors || !chalk.supportsColor) {
+    explainedRules = chalk.stripColor(explainedRules);
+  }
+
+  return explainedRules;
 }
 
 module.exports = explain;
