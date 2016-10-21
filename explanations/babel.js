@@ -19,5 +19,17 @@ module.exports = {
   "babel/arrow-parens": {
     "description": "Handles async functions correctly",
     "fixable": true
+  },
+  "babel/no-await-in-loop": {
+    "description": "guard against awaiting async functions inside of a loop",
+    "fixable": true
+  },
+  "babel/flow-object-type": {
+    "description": "Require a particular separator between properties in Flow object types.",
+    "fixable": true
+  },
+  "babel/func-params-comma-dangle": {
+    "description": "Require or forbid trailing commas for function paramater lists.",
+    "fixable": true
   }
 };
